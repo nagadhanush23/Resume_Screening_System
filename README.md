@@ -42,6 +42,15 @@ A comprehensive full-stack application that uses artificial intelligence to anal
 - **spaCy/NLTK** - Text processing libraries
 - **MongoDB/PostgreSQL** - Database for data persistence
 
+### Project samples (Full Implementation)
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -299,18 +308,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Lucide** - For the comprehensive icon library
 - **Open Source Community** - For inspiration and resources
 
-## 📞 Support
-
-For support, email support@resumescreener.com or join our Slack channel.
-
-## 🔗 Links
-
-- **Live Demo**: [https://resume-screener-demo.vercel.app](https://resume-screener-demo.vercel.app)
-- **Documentation**: [https://docs.resumescreener.com](https://docs.resumescreener.com)
-- **GitHub Issues**: [https://github.com/yourusername/resume-screening-system/issues](https://github.com/yourusername/resume-screening-system/issues)
-
----
-
-**Built with ❤️ by [Your Name]**
 
 *Transform your hiring process with AI-powered resume screening!*
