@@ -27,8 +27,6 @@ const styles = {
   scoreLow: { backgroundColor: '#fee2e2', color: '#991b1b', padding: '0.75rem 1.5rem', borderRadius: '9999px', fontSize: '1.5rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }
 };
 
-
-
 const ResumeScreeningSystem = () => {
   const [activeTab, setActiveTab] = useState('screening');
   const [jobDescription, setJobDescription] = useState('');
