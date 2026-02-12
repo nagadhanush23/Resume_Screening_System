@@ -1,33 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, FileText, Briefcase, Brain, Download, Star, CheckCircle, XCircle, AlertCircle, Search, Filter, Trash2, Eye, Calendar, User } from 'lucide-react';
-
-// CSS styles object to replace Tailwind classes
-const styles = {
-  container: { minHeight: '100vh', background: 'linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #faf5ff 100%)' },
-  header: { backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', borderBottom: '1px solid #e5e7eb' },
-  headerContent: { maxWidth: '1280px', margin: '0 auto', padding: '0 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', paddingBottom: '1rem' },
-  logo: { display: 'flex', alignItems: 'center', gap: '0.75rem' },
-  logoIcon: { background: 'linear-gradient(45deg, #2563eb, #7c3aed)', padding: '0.5rem', borderRadius: '0.5rem' },
-  title: { fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', margin: 0 },
-  subtitle: { fontSize: '0.875rem', color: '#6b7280', margin: 0 },
-  nav: { display: 'flex', gap: '0.5rem' },
-  navButton: { padding: '0.5rem 1rem', borderRadius: '0.5rem', fontWeight: '500', transition: 'all 0.2s', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' },
-  navButtonActive: { backgroundColor: '#2563eb', color: 'white', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' },
-  navButtonInactive: { color: '#6b7280', backgroundColor: 'transparent' },
-  main: { maxWidth: '1280px', margin: '0 auto', padding: '2rem 1rem' },
-  card: { backgroundColor: 'white', borderRadius: '0.75rem', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', padding: '1.5rem' },
-  button: { backgroundColor: '#2563eb', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.75rem', fontWeight: '600', border: 'none', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' },
-  textarea: { width: '100%', height: '16rem', padding: '1rem', border: '1px solid #d1d5db', borderRadius: '0.5rem', resize: 'none', fontFamily: 'inherit' },
-  uploadArea: { border: '2px dashed #d1d5db', borderRadius: '0.5rem', padding: '2rem', textAlign: 'center', backgroundColor: '#f9fafb', cursor: 'pointer', transition: 'all 0.2s' },
-  grid: { display: 'grid', gap: '1.5rem' },
-  gridCols2: { gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))' },
-  gridCols3: { gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' },
-  scoreHigh: { backgroundColor: '#dcfce7', color: '#166534', padding: '0.75rem 1.5rem', borderRadius: '9999px', fontSize: '1.5rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' },
-  scoreMedium: { backgroundColor: '#fef3c7', color: '#92400e', padding: '0.75rem 1.5rem', borderRadius: '9999px', fontSize: '1.5rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' },
-  scoreLow: { backgroundColor: '#fee2e2', color: '#991b1b', padding: '0.75rem 1.5rem', borderRadius: '9999px', fontSize: '1.5rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center' }
-};
-
-
+import { Upload, FileText, Briefcase, Brain, Download, Star, CheckCircle, XCircle, AlertCircle, Trash2, User, ChevronRight, Sparkles, TrendingUp, MessageSquare } from 'lucide-react';
 
 const ResumeScreeningSystem = () => {
   const [activeTab, setActiveTab] = useState('screening');
@@ -36,41 +8,43 @@ const ResumeScreeningSystem = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [results, setResults] = useState([]);
   const [history, setHistory] = useState([]);
+  const [activeNoteId, setActiveNoteId] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Mock NLP processing function (in real app, this would call your backend API)
+  // Mock NLP processing function
+  // Real-time API processing function
   const processResume = async (file, jobDesc) => {
     setIsProcessing(true);
-    
-    // Simulate API processing delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Mock extracted text and analysis
-    const mockAnalysis = {
-      id: Date.now() + Math.random(),
-      fileName: file.name,
-      fileSize: file.size,
-      uploadDate: new Date().toISOString(),
-      extractedText: "John Doe - Software Engineer with 5 years experience in React, Node.js, Python, and machine learning. Previously worked at Tech Corp as Senior Developer. Skills include: JavaScript, Python, React, Node.js, Docker, AWS, Machine Learning, TensorFlow, MongoDB, PostgreSQL. Education: BS Computer Science from Tech University.",
-      summary: "Experienced Software Engineer with strong background in full-stack development and emerging ML skills. Proficient in modern web technologies and cloud platforms.",
-      matchScore: Math.floor(Math.random() * 40) + 60, // 60-100%
-      classification: Math.random() > 0.3 ? 'Highly Suitable' : Math.random() > 0.6 ? 'Moderate' : 'Low Suitability',
-      keywordMatches: [
-        { keyword: 'React', found: true, importance: 'high' },
-        { keyword: 'Python', found: true, importance: 'high' },
-        { keyword: 'Machine Learning', found: true, importance: 'medium' },
-        { keyword: 'AWS', found: true, importance: 'medium' },
-        { keyword: 'Docker', found: true, importance: 'low' },
-        { keyword: 'Kubernetes', found: false, importance: 'medium' }
-      ],
-      recruiterComments: ''
-    };
 
-    const matchScore = mockAnalysis.matchScore;
-    mockAnalysis.classification = matchScore >= 80 ? 'Highly Suitable' : matchScore >= 60 ? 'Moderate' : 'Low Suitability';
-    
-    setIsProcessing(false);
-    return mockAnalysis;
+    try {
+      const formData = new FormData();
+      formData.append('resume', file);
+      formData.append('jobDescription', jobDesc);
+
+      const response = await fetch('http://localhost:5015/api/analyze', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to analyze resume');
+      }
+
+      const analysisResult = await response.json();
+
+      // Add default empty comments if not present
+      analysisResult.recruiterComments = '';
+
+      setIsProcessing(false);
+      return analysisResult;
+
+    } catch (error) {
+      console.error("Error processing resume:", error);
+      setIsProcessing(false);
+      alert(`Error analyzing ${file.name}: ${error.message}`);
+      return null;
+    }
   };
 
   const handleFileUpload = (e) => {
@@ -87,7 +61,9 @@ const ResumeScreeningSystem = () => {
     const newResults = [];
     for (const file of uploadedFiles) {
       const result = await processResume(file, jobDescription);
-      newResults.push(result);
+      if (result) {
+        newResults.push(result);
+      }
     }
 
     setResults(newResults);
@@ -100,200 +76,194 @@ const ResumeScreeningSystem = () => {
   };
 
   const getScoreColor = (score) => {
-    if (score >= 80) return 'text-green-600 bg-green-100';
-    if (score >= 60) return 'text-yellow-600 bg-yellow-100';
-    return 'text-red-600 bg-red-100';
+    if (score >= 85) return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
+    if (score >= 70) return 'text-amber-400 bg-amber-400/10 border-amber-400/20';
+    return 'text-rose-400 bg-rose-400/10 border-rose-400/20';
   };
 
   const getClassificationIcon = (classification) => {
-    if (classification === 'Highly Suitable') return <CheckCircle className="w-5 h-5 text-green-600" />;
-    if (classification === 'Moderate') return <AlertCircle className="w-5 h-5 text-yellow-600" />;
-    return <XCircle className="w-5 h-5 text-red-600" />;
+    if (classification === 'Highly Suitable') return <CheckCircle className="w-5 h-5 text-emerald-500" />;
+    if (classification === 'Moderate') return <AlertCircle className="w-5 h-5 text-amber-500" />;
+    return <XCircle className="w-5 h-5 text-rose-500" />;
   };
 
   const exportToPDF = (result) => {
-    // Mock PDF export
-    const reportContent = `
-Resume Screening Report
-======================
-File: ${result.fileName}
-Date: ${new Date(result.uploadDate).toLocaleDateString()}
-Match Score: ${result.matchScore}%
-Classification: ${result.classification}
-
-Summary: ${result.summary}
-
-Keyword Analysis:
-${result.keywordMatches.map(k => `- ${k.keyword}: ${k.found ? '✓' : '✗'} (${k.importance} importance)`).join('\n')}
-    `;
-    
+    // Mock PDF export logic
+    const reportContent = `Report for ${result.fileName}`;
     const blob = new Blob([reportContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `screening_report_${result.fileName}.txt`;
+    a.download = `report_${result.fileName}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-indigo-500 selection:text-white pb-20">
+      {/* Decorative Background Elements */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-500/20 blur-[100px] animate-pulse" />
+        <div className="absolute top-[20%] right-[-5%] w-[400px] h-[400px] rounded-full bg-purple-500/20 blur-[80px]" />
+        <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-pink-500/20 blur-[120px]" />
+      </div>
+
+      {/* Navbar */}
+      <nav className="relative z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center space-x-4">
+              <div className="bg-gradient-to-tr from-indigo-600 to-purple-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/20">
                 <Brain className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">AI Resume Screener</h1>
-                <p className="text-sm text-gray-600">Intelligent Resume Analysis & Matching</p>
+                <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                  AutoScreen.ai
+                </h1>
+                <p className="text-xs text-slate-500 font-medium tracking-wide uppercase">Intelligent Recruitment</p>
               </div>
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => setActiveTab('screening')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeTab === 'screening' 
-                    ? 'bg-blue-600 text-white shadow-lg' 
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                <Upload className="w-4 h-4 inline mr-2" />
-                Screen Resumes
-              </button>
-              <button
-                onClick={() => setActiveTab('results')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeTab === 'results' 
-                    ? 'bg-blue-600 text-white shadow-lg' 
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                <FileText className="w-4 h-4 inline mr-2" />
-                Results
-              </button>
-              <button
-                onClick={() => setActiveTab('dashboard')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeTab === 'dashboard' 
-                    ? 'bg-blue-600 text-white shadow-lg' 
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                <Briefcase className="w-4 h-4 inline mr-2" />
-                Dashboard
-              </button>
+
+            <div className="flex bg-slate-100/50 p-1 rounded-xl backdrop-blur-sm border border-slate-200/50">
+              {['screening', 'results', 'dashboard'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${activeTab === tab
+                    ? 'bg-white text-indigo-600 shadow-md shadow-slate-200/50 scale-100'
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                    }`}
+                >
+                  {tab === 'screening' && <Upload className="w-4 h-4" />}
+                  {tab === 'results' && <FileText className="w-4 h-4" />}
+                  {tab === 'dashboard' && <TrendingUp className="w-4 h-4" />}
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
             </div>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Screening Tab */}
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        {/* Screening View */}
         {activeTab === 'screening' && (
-          <div className="space-y-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Screen Resumes with AI</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Upload resumes and provide a job description. Our AI will analyze compatibility, 
-                extract key information, and provide detailed matching scores.
+          <div className="space-y-10 animate-fade-in-up">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+                Find the Perfect Candidate <span className="text-indigo-600">Instantly</span>
+              </h2>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Upload resumes and let our advanced AI analyze compatibility, extract key insights, and rank candidates based on your specific job requirements.
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* Job Description */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center mb-4">
-                  <Briefcase className="w-6 h-6 text-blue-600 mr-3" />
-                  <h3 className="text-xl font-semibold text-gray-900">Job Description</h3>
-                </div>
-                <textarea
-                  value={jobDescription}
-                  onChange={(e) => setJobDescription(e.target.value)}
-                  placeholder="Paste the job description here. Include required skills, experience, and qualifications..."
-                  className="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                />
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-sm text-gray-500">
-                    {jobDescription.length} characters
-                  </span>
-                  {jobDescription.trim() && (
-                    <span className="text-sm text-green-600 flex items-center">
-                      <CheckCircle className="w-4 h-4 mr-1" />
-                      Job description ready
-                    </span>
-                  )}
+            <div className="grid lg:grid-cols-12 gap-8">
+              {/* Job Description Column */}
+              <div className="lg:col-span-7 space-y-6">
+                <div className="glass-card rounded-2xl p-1">
+                  <div className="bg-white/50 rounded-xl p-6 border border-white/40">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
+                          <Briefcase className="w-5 h-5" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800">Job Description</h3>
+                      </div>
+                      <span className="text-xs font-semibold px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full">
+                        Required
+                      </span>
+                    </div>
+                    <textarea
+                      value={jobDescription}
+                      onChange={(e) => setJobDescription(e.target.value)}
+                      placeholder="Paste your job description here (e.g., 'Senior React Developer with 5+ years of experience in Node.js...')"
+                      className="w-full h-80 p-4 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all text-slate-700 placeholder:text-slate-400 leading-relaxed"
+                    />
+                    <div className="mt-4 flex items-center justify-end">
+                      <span className={`text-sm font-medium transition-colors ${jobDescription.trim() ? 'text-emerald-500' : 'text-slate-400'}`}>
+                        {jobDescription.length} characters
+                      </span>
+                      {jobDescription.trim() && <CheckCircle className="w-4 h-4 text-emerald-500 ml-2" />}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Resume Upload */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center mb-4">
-                  <FileText className="w-6 h-6 text-purple-600 mr-3" />
-                  <h3 className="text-xl font-semibold text-gray-900">Upload Resumes</h3>
-                </div>
-                
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer bg-gray-50 hover:bg-blue-50"
-                >
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-2">Click to upload resumes</p>
-                  <p className="text-sm text-gray-500">Supports PDF and DOCX files</p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    multiple
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
+              {/* Upload Column */}
+              <div className="lg:col-span-5 space-y-6">
+                <div className="glass-card rounded-2xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full h-full border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl flex flex-col items-center justify-center p-8 cursor-pointer transition-all duration-300 bg-slate-50/30 hover:bg-indigo-50/30"
+                  >
+                    <div className="w-20 h-20 bg-white rounded-full shadow-xl shadow-indigo-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <Upload className="w-10 h-10 text-indigo-600" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2">Upload Resumes</h3>
+                    <p className="text-slate-500 mb-6">Drag & drop files or click to browse</p>
+                    <button className="px-6 py-2 bg-white text-indigo-600 font-semibold rounded-lg shadow-sm border border-indigo-100 hover:bg-indigo-50 transition-colors">
+                      Select Files
+                    </button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      accept=".pdf,.doc,.docx"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </div>
                 </div>
 
-                {/* Uploaded Files */}
                 {uploadedFiles.length > 0 && (
-                  <div className="mt-6 space-y-2">
-                    <h4 className="font-medium text-gray-900">Uploaded Files ({uploadedFiles.length})</h4>
-                    {uploadedFiles.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-600 mr-2" />
-                          <span className="text-sm font-medium text-gray-900">{file.name}</span>
-                          <span className="text-xs text-gray-500 ml-2">
-                            ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                          </span>
+                  <div className="glass-card rounded-2xl p-6">
+                    <h4 className="font-bold text-slate-700 mb-4 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      Ready to Process ({uploadedFiles.length})
+                    </h4>
+                    <div className="space-y-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                      {uploadedFiles.map((file, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                          <div className="flex items-center gap-3 overflow-hidden">
+                            <div className="p-2 bg-purple-50 rounded-lg text-purple-600">
+                              <FileText className="w-4 h-4" />
+                            </div>
+                            <span className="text-sm font-medium text-slate-700 truncate">{file.name}</span>
+                          </div>
+                          <button
+                            onClick={() => removeFile(index)}
+                            className="text-slate-400 hover:text-rose-500 p-1.5 hover:bg-rose-50 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
-                        <button
-                          onClick={() => removeFile(index)}
-                          className="text-red-600 hover:text-red-800 p-1"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Process Button */}
-            <div className="text-center">
+            <div className="flex justify-center mt-12 pb-12">
               <button
                 onClick={handleScreening}
                 disabled={isProcessing || !jobDescription.trim() || uploadedFiles.length === 0}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="btn-primary px-10 py-5 rounded-2xl font-bold text-lg disabled:opacity-50 disabled:scale-100 disabled:shadow-none flex items-center gap-3 group"
               >
                 {isProcessing ? (
                   <>
-                    <div className="animate-spin inline-block w-5 h-5 mr-3 border-2 border-white border-t-transparent rounded-full"></div>
-                    Processing Resumes...
+                    <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Analyzing...</span>
                   </>
                 ) : (
                   <>
-                    <Brain className="w-5 h-5 inline mr-3" />
-                    Analyze Resumes with AI
+                    <Sparkles className="w-6 h-6 group-hover:animate-pulse" />
+                    <span>Start AI Analysis</span>
+                    <ChevronRight className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
               </button>
@@ -301,241 +271,251 @@ ${result.keywordMatches.map(k => `- ${k.keyword}: ${k.found ? '✓' : '✗'} (${
           </div>
         )}
 
-        {/* Results Tab */}
+        {/* Results View */}
         {activeTab === 'results' && (
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Screening Results</h2>
-              <p className="text-gray-600">AI-powered analysis results for uploaded resumes</p>
+          <div className="space-y-8 animate-fade-in-up">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-slate-900">Analysis Results</h2>
+                <p className="text-slate-500 mt-1">Found {results.length} matches based on your criteria</p>
+              </div>
+              <button onClick={() => setActiveTab('screening')} className="text-indigo-600 font-medium hover:text-indigo-700 flex items-center gap-2">
+                New Search <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
 
-            {results.length === 0 ? (
-              <div className="text-center py-12">
-                <Brain className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">No results yet. Upload resumes and run analysis first.</p>
-              </div>
-            ) : (
-              <div className="grid gap-6">
-                {results.map((result) => (
-                  <div key={result.id} className="bg-white rounded-xl shadow-lg p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center">
-                        <FileText className="w-6 h-6 text-blue-600 mr-3" />
-                        <div>
-                          <h3 className="text-xl font-semibold text-gray-900">{result.fileName}</h3>
-                          <p className="text-sm text-gray-500">
-                            Analyzed on {new Date(result.uploadDate).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => exportToPDF(result)}
-                        className="flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Export Report
-                      </button>
-                    </div>
+            <div className="grid gap-6">
+              {results.map((result) => (
+                <div key={result.id} className="glass-card rounded-2xl p-1 hover:border-indigo-200 transition-colors group">
+                  <div className="bg-white/60 p-6 rounded-xl">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
 
-                    <div className="grid md:grid-cols-3 gap-6">
-                      {/* Score & Classification */}
-                      <div className="space-y-4">
-                        <div className="text-center">
-                          <div className={`inline-flex items-center px-6 py-3 rounded-full text-2xl font-bold ${getScoreColor(result.matchScore)}`}>
-                            {result.matchScore}%
-                          </div>
-                          <p className="text-sm text-gray-600 mt-2">Match Score</p>
-                        </div>
-                        <div className="flex items-center justify-center space-x-2">
-                          {getClassificationIcon(result.classification)}
-                          <span className="font-medium text-gray-900">{result.classification}</span>
-                        </div>
-                      </div>
-
-                      {/* Summary */}
-                      <div className="md:col-span-2">
-                        <h4 className="font-semibold text-gray-900 mb-2">AI Summary</h4>
-                        <p className="text-gray-700 text-sm leading-relaxed">{result.summary}</p>
-                      </div>
-                    </div>
-
-                    {/* Keywords Analysis */}
-                    <div className="mt-6">
-                      <h4 className="font-semibold text-gray-900 mb-3">Keyword Analysis</h4>
-                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {result.keywordMatches.map((keyword, idx) => (
-                          <div
-                            key={idx}
-                            className={`flex items-center justify-between p-3 rounded-lg ${
-                              keyword.found ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
-                            }`}
-                          >
-                            <span className="font-medium text-gray-900">{keyword.keyword}</span>
-                            <div className="flex items-center space-x-2">
-                              <span className={`text-xs px-2 py-1 rounded-full ${
-                                keyword.importance === 'high' ? 'bg-red-100 text-red-800' :
-                                keyword.importance === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-gray-100 text-gray-800'
-                              }`}>
-                                {keyword.importance}
-                              </span>
-                              {keyword.found ? (
-                                <CheckCircle className="w-4 h-4 text-green-600" />
-                              ) : (
-                                <XCircle className="w-4 h-4 text-red-600" />
-                              )}
+                      {/* Left: Info */}
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-bold text-lg shadow-sm">
+                              {result.matchScore}%
+                            </div>
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-800">{result.fileName}</h3>
+                              <div className="flex items-center gap-2 mt-1">
+                                {getClassificationIcon(result.classification)}
+                                <span className="text-sm font-medium text-slate-600">{result.classification}</span>
+                              </div>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
+                          <button
+                            onClick={() => setActiveNoteId(activeNoteId === result.id ? null : result.id)}
+                            className={`mr-2 transition-colors ${activeNoteId === result.id ? 'text-indigo-600' : 'text-slate-400 hover:text-indigo-600'}`}
+                            title="Recruiter Notes"
+                          >
+                            <MessageSquare className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => setActiveNoteId(activeNoteId === result.id ? null : result.id)}
+                            className={`mr-2 transition-colors ${activeNoteId === result.id ? 'text-indigo-600' : 'text-slate-400 hover:text-indigo-600'}`}
+                            title="Recruiter Notes"
+                          >
+                            <MessageSquare className="w-5 h-5" />
+                          </button>
+                          <button onClick={() => exportToPDF(result)} className="text-slate-400 hover:text-indigo-600 transition-colors" title="Export PDF">
+                            <Download className="w-5 h-5" />
+                          </button>
+                        </div>
 
-                    {/* Recruiter Comments */}
-                    <div className="mt-6">
-                      <h4 className="font-semibold text-gray-900 mb-2">Recruiter Comments</h4>
-                      <textarea
-                        value={result.recruiterComments}
-                        onChange={(e) => {
-                          const updatedResults = results.map(r => 
-                            r.id === result.id ? { ...r, recruiterComments: e.target.value } : r
-                          );
-                          setResults(updatedResults);
-                        }}
-                        placeholder="Add your comments about this candidate..."
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        rows="3"
-                      />
+                        <p className="text-slate-600 leading-relaxed mt-4 bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm">
+                          {result.summary}
+                        </p>
+
+                        <div className="mt-6 flex flex-wrap gap-2">
+                          {result.keywordMatches.map((k, i) => (
+                            <span key={i} className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border ${k.found
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                              : 'bg-slate-50 text-slate-400 border-slate-100'
+                              }`}>
+                              {k.found ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                              {k.keyword}
+                            </span>
+                          ))}
+                        </div>
+
+                        {result.interviewQuestions && (
+                          <div className="mt-8 space-y-4">
+                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                              <Brain className="w-5 h-5 text-indigo-600" />
+                              AI Interview Questions
+                            </h3>
+
+                            <div className="grid gap-4">
+                              {/* Level 1 */}
+                              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <h4 className="font-bold text-slate-700 mb-3 text-xs uppercase tracking-wider flex items-center">
+                                  <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                                  Level 1: Basic
+                                </h4>
+                                <ul className="space-y-2">
+                                  {result.interviewQuestions.level1?.map((q, i) => (
+                                    <li key={i} className="text-sm text-slate-600 flex items-start">
+                                      <span className="mr-2">•</span>
+                                      {q}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {/* Level 2 */}
+                              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <h4 className="font-bold text-slate-700 mb-3 text-xs uppercase tracking-wider flex items-center">
+                                  <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+                                  Level 2: Intermediate
+                                </h4>
+                                <ul className="space-y-2">
+                                  {result.interviewQuestions.level2?.map((q, i) => (
+                                    <li key={i} className="text-sm text-slate-600 flex items-start">
+                                      <span className="mr-2">•</span>
+                                      {q}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {/* Level 3 */}
+                              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <h4 className="font-bold text-slate-700 mb-3 text-xs uppercase tracking-wider flex items-center">
+                                  <span className="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>
+                                  Level 3: Advanced
+                                </h4>
+                                <ul className="space-y-2">
+                                  {result.interviewQuestions.level3?.map((q, i) => (
+                                    <li key={i} className="text-sm text-slate-600 flex items-start">
+                                      <span className="mr-2">•</span>
+                                      {q}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {/* DSA */}
+                              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <h4 className="font-bold text-slate-700 mb-3 text-xs uppercase tracking-wider flex items-center">
+                                  <span className="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>
+                                  DSA Challenges
+                                </h4>
+                                <div className="space-y-3">
+                                  {result.interviewQuestions.dsa?.map((q, i) => (
+                                    <div key={i} className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide ${q.difficulty?.includes('Easy') ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                                        }`}>
+                                        {q.difficulty}
+                                      </span>
+                                      <p className="mt-2 text-sm text-slate-700 font-medium leading-relaxed">{q.question}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Right: Comments (Hidden by default, toggled by icon) */}
+                      {activeNoteId === result.id && (
+                        <div className="mt-6 animate-fade-in-up">
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Recruiter Notes
+                          </label>
+                          <textarea
+                            value={result.recruiterComments}
+                            onChange={(e) => {
+                              const updatedResults = results.map(r => r.id === result.id ? { ...r, recruiterComments: e.target.value } : r);
+                              setResults(updatedResults);
+                            }}
+                            className="w-full h-32 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none shadow-inner"
+                            placeholder="Add private notes about this candidate..."
+                            autoFocus
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Dashboard Tab */}
+        {/* Dashboard View */}
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Recruiter Dashboard</h2>
-              <p className="text-gray-600">Overview of all screening activities and history</p>
-            </div>
-
-            {/* Stats */}
+          <div className="animate-fade-in-up space-y-8">
             <div className="grid md:grid-cols-4 gap-6">
-              <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FileText className="w-6 h-6 text-blue-600" />
+              {[
+                { label: 'Total Candidates', value: history.length, icon: User, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+                { label: 'Highly Suitable', value: history.filter(h => h.classification === 'Highly Suitable').length, icon: Star, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { label: 'Moderate Fit', value: history.filter(h => h.classification === 'Moderate').length, icon: AlertCircle, color: 'text-amber-600', bg: 'bg-amber-50' },
+                { label: 'Low Fit', value: history.filter(h => h.classification === 'Low Suitability').length, icon: XCircle, color: 'text-rose-600', bg: 'bg-rose-50' },
+              ].map((stat, i) => (
+                <div key={i} className="glass-card p-6 rounded-2xl">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
+                      <stat.icon className="w-6 h-6" />
+                    </div>
+                    <span className="text-3xl font-bold text-slate-800">{stat.value}</span>
+                  </div>
+                  <h3 className="text-sm font-medium text-slate-500">{stat.label}</h3>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">{history.length}</div>
-                <div className="text-sm text-gray-600">Total Resumes</div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                </div>
-                <div className="text-2xl font-bold text-gray-900">
-                  {history.filter(h => h.classification === 'Highly Suitable').length}
-                </div>
-                <div className="text-sm text-gray-600">Highly Suitable</div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div className="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <AlertCircle className="w-6 h-6 text-yellow-600" />
-                </div>
-                <div className="text-2xl font-bold text-gray-900">
-                  {history.filter(h => h.classification === 'Moderate').length}
-                </div>
-                <div className="text-sm text-gray-600">Moderate</div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div className="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <XCircle className="w-6 h-6 text-red-600" />
-                </div>
-                <div className="text-2xl font-bold text-gray-900">
-                  {history.filter(h => h.classification === 'Low Suitability').length}
-                </div>
-                <div className="text-sm text-gray-600">Low Suitability</div>
-              </div>
+              ))}
             </div>
 
-            {/* History Table */}
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Screening History</h3>
+            <div className="glass-card rounded-2xl overflow-hidden">
+              <div className="p-6 border-b border-white/20">
+                <h3 className="text-lg font-bold text-slate-800">Recent Activity</h3>
               </div>
-              
-              {history.length === 0 ? (
-                <div className="text-center py-12">
-                  <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">No screening history yet.</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Resume
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Score
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Classification
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
-                        </th>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead className="bg-slate-50/50 text-slate-500 text-xs uppercase tracking-wider">
+                    <tr>
+                      <th className="px-6 py-4 font-semibold">Candidate</th>
+                      <th className="px-6 py-4 font-semibold">Date</th>
+                      <th className="px-6 py-4 font-semibold">Score</th>
+                      <th className="px-6 py-4 font-semibold">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {history.map((item) => (
+                      <tr key={item.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="font-bold text-slate-700">{item.fileName}</div>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-500">
+                          {new Date(item.uploadDate).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 rounded-md text-xs font-bold border ${getScoreColor(item.matchScore)}`}>
+                            {item.matchScore}%
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2 text-sm text-slate-600">
+                            {getClassificationIcon(item.classification)}
+                            {item.classification}
+                          </div>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {history.map((item) => (
-                        <tr key={item.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <FileText className="w-5 h-5 text-gray-400 mr-3" />
-                              <span className="text-sm font-medium text-gray-900">{item.fileName}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(item.uploadDate).toLocaleDateString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreColor(item.matchScore)}`}>
-                              {item.matchScore}%
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              {getClassificationIcon(item.classification)}
-                              <span className="ml-2 text-sm text-gray-900">{item.classification}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            <button
-                              onClick={() => exportToPDF(item)}
-                              className="text-blue-600 hover:text-blue-900"
-                            >
-                              <Download className="w-4 h-4" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                    ))}
+                  </tbody>
+                </table>
+                {history.length === 0 && (
+                  <div className="p-12 text-center text-slate-400">
+                    No history available yet.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
-      </div>
+
+      </main>
     </div>
   );
 };
